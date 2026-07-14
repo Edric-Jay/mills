@@ -1,0 +1,86 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.primary,
+.primaryAlt,
+.ghost,
+.joinBtn {
+  border: none;
+  border-radius: 999px;
+  padding: 0.95rem 1.2rem;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: transform 0.15s, opacity 0.15s, background 0.15s;
+}
+
+.primary {
+  background: var(--accent);
+  color: #fffaf5;
+  box-shadow: 0 10px 28px var(--glow);
+}
+
+.primaryAlt {
+  background: var(--ink);
+  color: var(--mist);
+}
+
+.ghost {
+  background: transparent;
+  border: 1.5px dashed rgba(26, 36, 33, 0.25);
+  color: var(--ink-soft);
+}
+
+.primary:hover,
+.primaryAlt:hover,
+.ghost:hover,
+.joinBtn:hover {
+  transform: translateY(-1px);
+}
+
+.primary:disabled,
+.primaryAlt:disabled,
+.ghost:disabled,
+.joinBtn:disabled {
+  opacity: 0.55;
+  transform: none;
+  cursor: not-allowed;
+}
+
+.join {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.input {
+  border: 1.5px solid rgba(26, 36, 33, 0.2);
+  border-radius: 999px;
+  padding: 0.85rem 1.1rem;
+  background: rgba(255, 255, 255, 0.55);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-align: center;
+  color: var(--ink);
+  outline: none;
+}
+
+.input:focus {
+  border-color: var(--accent);
+}
+
+.joinBtn {
+  background: var(--highlight);
+  color: var(--ink);
+  padding-inline: 1.25rem;
+}
+
+.error {
+  margin: 0.25rem 0 0;
+  color: var(--danger);
+  font-size: 0.9rem;
+  font-weight: 600;
+}

@@ -1,0 +1,14 @@
+{
+  "name": "mills",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm -r --parallel run dev",
+    "dev:web": "pnpm --filter @mills/web dev",
+    "dev:server": "pnpm --filter @mills/server dev",
+    "build": "pnpm -r run build",
+    "test": "pnpm --filter @mills/game test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

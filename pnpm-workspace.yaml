@@ -1,0 +1,8 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+allowBuilds:
+  esbuild: true
+  sharp: true
+# postcss in the lockfile is newer than pnpm 11's default 24h minimumReleaseAge
+minimumReleaseAge: 0

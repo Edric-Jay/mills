@@ -1,0 +1,110 @@
+:root {
+  --ink: #1a2421;
+  --ink-soft: #3d4f48;
+  --mist: #e8eef0;
+  --fog: #d2dde0;
+  --panel: rgba(255, 255, 255, 0.55);
+  --line: #2c3a35;
+  --accent: #c45c26;
+  --accent-deep: #9a4015;
+  --white-piece: #f3ebe0;
+  --white-edge: #c9b8a0;
+  --black-piece: #1e3a36;
+  --black-edge: #0f221f;
+  --highlight: #5ea89a;
+  --danger: #b33a3a;
+  --glow: rgba(196, 92, 38, 0.35);
+  --font-display: "Syne", system-ui, sans-serif;
+  --font-body: "Figtree", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background:
+    radial-gradient(ellipse 90% 60% at 15% 10%, rgba(94, 168, 154, 0.28), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 90% 20%, rgba(196, 92, 38, 0.18), transparent 50%),
+    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(30, 58, 54, 0.12), transparent 55%),
+    linear-gradient(165deg, #f4f7f8 0%, #dde8ea 45%, #cfdcde 100%);
+  background-attachment: fixed;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+@keyframes mill-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0 transparent);
+  }
+  50% {
+    filter: drop-shadow(0 0 8px var(--glow));
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-4px);
+  }
+  40% {
+    transform: translateX(4px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+@keyframes float-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mill-glow {
+  animation: mill-pulse 1.2s ease-in-out infinite;
+}
+
+.shake {
+  animation: shake 0.4s ease-in-out;
+}

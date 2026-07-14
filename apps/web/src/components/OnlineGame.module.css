@@ -1,0 +1,14 @@
+.center {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+  padding: 2rem;
+}
+
+.err {
+  text-align: center;
+  color: var(--danger);
+  font-weight: 600;
+  padding-bottom: 1.5rem;
+}

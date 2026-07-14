@@ -1,0 +1,92 @@
+.hero {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1.25rem 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.atmosphere {
+  position: absolute;
+  inset: 0;
+  background:
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231e3a36' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
+    radial-gradient(circle at 70% 40%, rgba(196, 92, 38, 0.15), transparent 40%);
+  pointer-events: none;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  max-width: 36rem;
+  width: 100%;
+  animation: float-in 0.7s ease-out both;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(4.5rem, 16vw, 7.5rem);
+  line-height: 0.9;
+  margin: 0 0 1rem;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  text-shadow: 0 12px 40px rgba(26, 36, 33, 0.12);
+}
+
+.tagline {
+  margin: 0 auto 2rem;
+  max-width: 28rem;
+  font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+.cta {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.localRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1rem;
+  border-radius: 999px;
+  border: 1.5px solid rgba(26, 36, 33, 0.2);
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(8px);
+  font-weight: 600;
+  transition: border-color 0.2s, transform 0.2s, background 0.2s;
+}
+
+.secondary:hover {
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.55);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 480px) {
+  .localRow {
+    grid-template-columns: 1fr;
+  }
+}
