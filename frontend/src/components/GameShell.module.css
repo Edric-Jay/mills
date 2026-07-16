@@ -1,11 +1,8 @@
 .page {
   min-height: 100dvh;
   min-height: 100svh;
-  padding:
-    max(0.75rem, var(--safe-top))
-    max(0.75rem, var(--safe-right))
-    max(1rem, var(--safe-bottom))
-    max(0.75rem, var(--safe-left));
+  padding: max(0.75rem, var(--safe-top)) max(0.75rem, var(--safe-right))
+    max(1rem, var(--safe-bottom)) max(0.75rem, var(--safe-left));
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
