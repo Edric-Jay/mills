@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Figtree, Syne } from "next/font/google";
 import "./globals.css";
 
@@ -17,6 +17,19 @@ const figtree = Figtree({
 export const metadata: Metadata = {
   title: "Mills — Nine Men's Morris",
   description: "Play Nine Men's Morris online, locally, or against the AI.",
+  appleWebApp: {
+    capable: true,
+    title: "Mills",
+    statusBarStyle: "default",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  viewportFit: "cover",
+  themeColor: "#dde8ea",
 };
 
 export default function RootLayout({

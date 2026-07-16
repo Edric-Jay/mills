@@ -10,6 +10,7 @@
 .joinBtn {
   border: none;
   border-radius: 999px;
+  min-height: 3rem;
   padding: 0.95rem 1.2rem;
   font-weight: 700;
   font-size: 1rem;
@@ -59,13 +60,16 @@
 .input {
   border: 1.5px solid rgba(26, 36, 33, 0.2);
   border-radius: 999px;
+  min-height: 3rem;
   padding: 0.85rem 1.1rem;
   background: rgba(255, 255, 255, 0.55);
   font-weight: 700;
+  font-size: 16px;
   letter-spacing: 0.16em;
   text-align: center;
   color: var(--ink);
   outline: none;
+  width: 100%;
 }
 
 .input:focus {
@@ -83,4 +87,14 @@
   color: var(--danger);
   font-size: 0.9rem;
   font-weight: 600;
+}
+
+@media (max-width: 380px) {
+  .join {
+    grid-template-columns: 1fr;
+  }
+
+  .joinBtn {
+    width: 100%;
+  }
 }

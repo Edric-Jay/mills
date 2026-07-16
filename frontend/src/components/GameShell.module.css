@@ -1,0 +1,164 @@
+.page {
+  min-height: 100dvh;
+  min-height: 100svh;
+  padding:
+    max(0.75rem, var(--safe-top))
+    max(0.75rem, var(--safe-right))
+    max(1rem, var(--safe-bottom))
+    max(0.75rem, var(--safe-left));
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  animation: float-in 0.5s ease-out both;
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  max-width: 640px;
+  margin: 0 auto;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.45rem;
+  letter-spacing: -0.03em;
+  padding: 0.25rem 0;
+  min-height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.meta {
+  text-align: right;
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.sub,
+.code,
+.note {
+  margin: 0.15rem 0 0;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.code span {
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--accent-deep);
+}
+
+.status {
+  text-align: center;
+  font-weight: 600;
+  font-size: clamp(0.9rem, 3.2vw, 1rem);
+  min-height: 2.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.15rem;
+  flex-shrink: 0;
+  padding-inline: 0.25rem;
+}
+
+.status p {
+  margin: 0;
+}
+
+.winner {
+  color: var(--accent-deep);
+  font-size: clamp(1rem, 3.5vw, 1.15rem);
+}
+
+.counts {
+  max-width: 520px;
+  margin: 0 auto;
+  width: 100%;
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  flex-shrink: 0;
+}
+
+.side {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  line-height: 1.35;
+}
+
+.dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+}
+
+.white {
+  background: var(--white-piece);
+}
+
+.black {
+  background: var(--black-piece);
+}
+
+@media (max-width: 480px) {
+  .page {
+    gap: 0.5rem;
+  }
+
+  .header {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .brand {
+    font-size: 1.3rem;
+  }
+
+  .meta {
+    text-align: right;
+  }
+
+  .title {
+    font-size: 0.85rem;
+  }
+
+  .sub {
+    display: none;
+  }
+
+  .counts {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-height: 700px) and (orientation: landscape) {
+  .page {
+    gap: 0.35rem;
+    padding-block: 0.5rem;
+  }
+
+  .status {
+    min-height: 1.5rem;
+    font-size: 0.85rem;
+  }
+
+  .counts {
+    display: none;
+  }
+}

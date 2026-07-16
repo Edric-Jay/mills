@@ -1,7 +1,11 @@
 .wrap {
-  width: min(92vw, 520px);
+  width: min(92vw, 520px, calc(100dvh - 12rem));
   aspect-ratio: 1;
   margin: 0 auto;
+  flex: 0 1 auto;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .svg {
@@ -9,6 +13,12 @@
   height: 100%;
   display: block;
   overflow: visible;
+  touch-action: manipulation;
+}
+
+.point {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .flyLayer {
@@ -116,6 +126,12 @@
 
 @media (max-width: 480px) {
   .wrap {
-    width: min(96vw, 420px);
+    width: min(96vw, calc(100dvh - 11rem), calc(100svh - 11rem));
+  }
+}
+
+@media (max-height: 700px) and (orientation: landscape) {
+  .wrap {
+    width: min(70vh, 52vw, 420px);
   }
 }

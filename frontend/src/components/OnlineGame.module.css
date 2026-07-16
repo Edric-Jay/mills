@@ -1,0 +1,23 @@
+.center {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+  padding:
+    max(2rem, var(--safe-top))
+    max(1.25rem, var(--safe-right))
+    max(2rem, var(--safe-bottom))
+    max(1.25rem, var(--safe-left));
+  text-align: center;
+}
+
+.err {
+  text-align: center;
+  color: var(--danger);
+  font-weight: 600;
+  padding:
+    0
+    max(1rem, var(--safe-right))
+    max(1.5rem, var(--safe-bottom))
+    max(1rem, var(--safe-left));
+}

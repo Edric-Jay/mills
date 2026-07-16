@@ -1,4 +1,4 @@
-import { ADJACENCY, MILLS } from "./board";
+import { ADJACENCY, MILLS } from "./board.js";
 import {
   applyAction,
   canFly,
@@ -6,9 +6,9 @@ import {
   legalActions,
   millsAt,
   piecesOnBoard,
-} from "./engine";
-import type { GameAction, GameState, Player } from "./types";
-import { opponent } from "./types";
+} from "./engine.js";
+import type { GameAction, GameState, Player } from "./types.js";
+import { opponent } from "./types.js";
 
 function evaluate(state: GameState, perspective: Player): number {
   if (state.winner === perspective) return 100_000;

@@ -1,4 +1,4 @@
-import { ADJACENCY, BOARD_SIZE, MILLS, PIECES_PER_PLAYER } from "./board";
+import { ADJACENCY, BOARD_SIZE, MILLS, PIECES_PER_PLAYER } from "./board.js";
 import {
   type Cell,
   type GameAction,
@@ -6,7 +6,7 @@ import {
   type GameState,
   type Player,
   opponent,
-} from "./types";
+} from "./types.js";
 
 export function createInitialState(): GameState {
   return {

@@ -205,9 +205,17 @@ export function Board({
           return (
             <g
               key={i}
-              className={inMill ? "mill-glow" : undefined}
+              className={`${styles.point}${inMill ? " mill-glow" : ""}`}
               onClick={() => onPointClick(i)}
-              style={{ cursor: "pointer" }}
+              role="button"
+              tabIndex={0}
+              aria-label={`Point ${i + 1}${cell ? `, ${cell}` : ""}${isLegal ? ", legal" : ""}`}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onPointClick(i);
+                }
+              }}
             >
               <circle
                 cx={coord.x}
@@ -231,7 +239,8 @@ export function Board({
                   className={isLanding ? styles.pieceLand : undefined}
                 />
               )}
-              <circle cx={coord.x} cy={coord.y} r={6} fill="transparent" />
+              {/* Larger touch target for mobile */}
+              <circle cx={coord.x} cy={coord.y} r={7.5} fill="transparent" />
             </g>
           );
         })}

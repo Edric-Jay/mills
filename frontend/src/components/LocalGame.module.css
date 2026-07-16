@@ -1,16 +1,23 @@
 .actions {
   display: flex;
   justify-content: center;
-  padding: 0 1rem 2rem;
+  padding:
+    0.5rem
+    max(1rem, var(--safe-right))
+    max(1.5rem, var(--safe-bottom))
+    max(1rem, var(--safe-left));
 }
 
 .btn {
   border: none;
   border-radius: 999px;
+  min-height: 2.75rem;
+  min-width: 8rem;
   padding: 0.7rem 1.4rem;
   background: var(--ink);
   color: var(--mist);
   font-weight: 600;
+  font-size: 1rem;
   transition: transform 0.15s, background 0.15s;
 }
 

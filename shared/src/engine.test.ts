@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ADJACENCY } from "./board";
+import { ADJACENCY } from "./board.js";
 import {
   applyAction,
   canFly,
@@ -8,7 +8,7 @@ import {
   getPhase,
   legalActions,
   piecesOnBoard,
-} from "./index";
+} from "./index.js";
 
 describe("createInitialState", () => {
   it("starts with empty board and white to place", () => {

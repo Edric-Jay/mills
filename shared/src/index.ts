@@ -5,7 +5,7 @@ export {
   MILLS,
   PIECES_PER_PLAYER,
   POINT_COORDS,
-} from "./board";
+} from "./board.js";
 
 export {
   actionsEqual,
@@ -21,9 +21,9 @@ export {
   millsAt,
   piecesOnBoard,
   removablePoints,
-} from "./engine";
+} from "./engine.js";
 
-export { chooseAiMove } from "./ai";
+export { chooseAiMove } from "./ai.js";
 
 export type {
   Cell,
@@ -31,6 +31,6 @@ export type {
   GamePhase,
   GameState,
   Player,
-} from "./types";
+} from "./types.js";
 
-export { opponent } from "./types";
+export { opponent } from "./types.js";

@@ -16,10 +16,19 @@
   --glow: rgba(196, 92, 38, 0.35);
   --font-display: "Syne", system-ui, sans-serif;
   --font-body: "Figtree", system-ui, sans-serif;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
 }
 
 * {
   box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 html,
@@ -27,6 +36,7 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100%;
+  min-height: 100dvh;
 }
 
 body {
@@ -38,15 +48,23 @@ body {
     radial-gradient(ellipse 80% 60% at 50% 100%, rgba(30, 58, 54, 0.12), transparent 55%),
     linear-gradient(165deg, #f4f7f8 0%, #dde8ea 45%, #cfdcde 100%);
   background-attachment: fixed;
+  overscroll-behavior: none;
 }
 
 a {
   color: inherit;
   text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+input {
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 button {
-  font-family: inherit;
   cursor: pointer;
 }
 
@@ -107,4 +125,14 @@ button {
 
 .shake {
   animation: shake 0.4s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

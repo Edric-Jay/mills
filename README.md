@@ -4,18 +4,19 @@ Nine Men's Morris — play online, locally, or against a bot.
 
 ## Stack
 
-- `apps/web` — Next.js (App Router) UI
-- `apps/server` — Express + Socket.IO (authoritative multiplayer)
-- `packages/game` — shared rules engine + AI
+- `frontend` — Next.js (App Router) UI
+- `backend` — Express + Socket.IO (authoritative multiplayer)
+- `shared` — shared rules engine + AI (`@mills/game`)
 
 Games are in-memory on the server; restarting the server clears rooms.
 
+Uses **npm workspaces** (Node 20+).
+
 ## Setup
 
-Requires Node 20+ and [pnpm](https://pnpm.io/).
-
 ```bash
-pnpm install
+npm install
+npm run build -w @mills/game
 ```
 
 ## Develop
@@ -23,27 +24,27 @@ pnpm install
 Terminal 1 — game server (`:4000`):
 
 ```bash
-pnpm --filter @mills/server dev
+npm run dev:server
 ```
 
 Terminal 2 — web app (`:3000`):
 
 ```bash
-pnpm --filter @mills/web dev
+npm run dev:web
 ```
 
 Or both in parallel:
 
 ```bash
-pnpm dev
+npm run dev
 ```
 
-Set `NEXT_PUBLIC_SOCKET_URL` in `apps/web/.env.local` (defaults to `http://localhost:4000`).
+Set `NEXT_PUBLIC_SOCKET_URL` in `frontend/.env.local` (defaults to `http://localhost:4000`).
 
 ## Test
 
 ```bash
-pnpm --filter @mills/game test
+npm test
 ```
 
 ## Modes
@@ -52,3 +53,7 @@ pnpm --filter @mills/game test
 - **Online vs bot** — Socket.IO room with server-side AI
 - **Local 2-player** — same device, engine in the browser
 - **vs AI** — browser-side minimax
+
+## Deploy
+
+See [DEPLOY.md](./DEPLOY.md) for Vercel (frontend) and Render (backend).
