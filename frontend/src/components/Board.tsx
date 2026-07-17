@@ -33,12 +33,14 @@ function PieceVisual({
   cx = 0,
   cy = 0,
   r = 3.6,
+  opacity = 1,
 }: {
   player: Player;
   className?: string;
   cx?: number;
   cy?: number;
   r?: number;
+  opacity?: number;
 }) {
   return (
     <circle
@@ -46,6 +48,7 @@ function PieceVisual({
       cx={cx}
       cy={cy}
       r={r}
+      opacity={opacity}
       fill={player === "white" ? "var(--white-piece)" : "var(--black-piece)"}
       stroke={player === "white" ? "var(--white-edge)" : "var(--black-edge)"}
       strokeWidth="0.7"
@@ -54,10 +57,12 @@ function PieceVisual({
   );
 }
 
+/** Move animation uses SVG attribute transforms only — CSS scale on SVG circles breaks layout. */
 function FlyingPiece({ motion }: { motion: Extract<BoardMotion, { kind: "move" }> }) {
   const from = POINT_COORDS[motion.from];
   const to = POINT_COORDS[motion.to];
   const [pos, setPos] = useState<FlyPos>({ x: from.x, y: from.y, lift: 0 });
+  const [pulse, setPulse] = useState(0);
 
   useEffect(() => {
     let frame = 0;
@@ -74,6 +79,7 @@ function FlyingPiece({ motion }: { motion: Extract<BoardMotion, { kind: "move" }
         y: from.y + (to.y - from.y) * e - lift,
         lift,
       });
+      setPulse(t);
       if (t < 1) frame = requestAnimationFrame(tick);
     };
 
@@ -82,32 +88,42 @@ function FlyingPiece({ motion }: { motion: Extract<BoardMotion, { kind: "move" }
   }, [motion.key, from.x, from.y, to.x, to.y]);
 
   const scale = 1 + pos.lift * 0.04;
+  const trailOpacity = 0.85 * (1 - pulse);
+  const ghostOpacity = Math.max(0, 0.9 * (1 - pulse * 1.4));
+  const destOpacity = pulse < 0.35 ? pulse / 0.35 : Math.max(0, 1 - (pulse - 0.35) / 0.65);
+  const destR = 3.2 + pulse * 2.8;
 
   return (
     <g className={styles.flyLayer} pointerEvents="none">
       <line
-        className={styles.flyTrail}
         x1={from.x}
         y1={from.y}
         x2={to.x}
         y2={to.y}
         stroke={motion.player === "white" ? "var(--white-edge)" : "var(--highlight)"}
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeDasharray="2.5 2"
+        opacity={trailOpacity}
       />
       <circle
-        className={styles.originGhost}
         cx={from.x}
         cy={from.y}
-        r={3.2}
+        r={3.2 + pulse * 2}
         fill="none"
         stroke={motion.player === "white" ? "var(--white-edge)" : "var(--black-edge)"}
+        strokeWidth="0.85"
+        strokeDasharray="2 1.5"
+        opacity={ghostOpacity}
       />
       <circle
-        className={styles.destRing}
         cx={to.x}
         cy={to.y}
-        r={5.2}
+        r={destR}
         fill="none"
         stroke="var(--accent)"
+        strokeWidth="0.9"
+        opacity={destOpacity}
       />
       <g transform={`translate(${pos.x} ${pos.y}) scale(${scale})`}>
         <PieceVisual player={motion.player} />
@@ -118,10 +134,32 @@ function FlyingPiece({ motion }: { motion: Extract<BoardMotion, { kind: "move" }
 
 function RemovingPiece({ motion }: { motion: Extract<BoardMotion, { kind: "remove" }> }) {
   const c = POINT_COORDS[motion.from];
+  const [t, setT] = useState(0);
+
+  useEffect(() => {
+    let frame = 0;
+    const start = performance.now();
+    const duration = 420;
+
+    const tick = (now: number) => {
+      const progress = Math.min(1, (now - start) / duration);
+      setT(progress);
+      if (progress < 1) frame = requestAnimationFrame(tick);
+    };
+
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [motion.key]);
+
+  const e = easeOutCubic(t);
+  const y = c.y - 10 * e;
+  const scale = 1 - 0.8 * e;
+  const opacity = 1 - e;
+
   return (
     <g className={styles.flyLayer} pointerEvents="none">
-      <g transform={`translate(${c.x} ${c.y})`} className={styles.pieceRemove}>
-        <PieceVisual player={motion.player} />
+      <g transform={`translate(${c.x} ${y}) scale(${scale})`}>
+        <PieceVisual player={motion.player} opacity={opacity} />
       </g>
     </g>
   );
@@ -205,7 +243,7 @@ export function Board({
           return (
             <g
               key={i}
-              className={`${styles.point}${inMill ? " mill-glow" : ""}`}
+              className={`${styles.point}${inMill ? ` ${styles.millGlow}` : ""}`}
               onClick={() => onPointClick(i)}
               role="button"
               tabIndex={0}
@@ -239,7 +277,6 @@ export function Board({
                   className={isLanding ? styles.pieceLand : undefined}
                 />
               )}
-              {/* Larger touch target for mobile */}
               <circle cx={coord.x} cy={coord.y} r={7.5} fill="transparent" />
             </g>
           );

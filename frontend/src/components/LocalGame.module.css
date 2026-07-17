@@ -1,13 +1,3 @@
-.actions {
-  display: flex;
-  justify-content: center;
-  padding:
-    0.5rem
-    max(1rem, var(--safe-right))
-    max(1.5rem, var(--safe-bottom))
-    max(1rem, var(--safe-left));
-}
-
 .btn {
   border: none;
   border-radius: 999px;

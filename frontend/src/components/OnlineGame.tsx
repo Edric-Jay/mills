@@ -199,6 +199,13 @@ export function OnlineGame({ roomId }: { roomId: string }) {
         onPointClick={onPointClick}
         youAre={color}
         shaking={shaking}
+        onPlayAgain={
+          room?.mode === "bot"
+            ? () => {
+                window.location.href = "/";
+              }
+            : undefined
+        }
       />
       {error && error !== "Room not found" && (
         <p className={styles.err}>{error}</p>

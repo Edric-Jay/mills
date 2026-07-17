@@ -9,6 +9,12 @@ export type BoardMotion =
   | { kind: "move"; from: number; to: number; player: Player; key: number }
   | { kind: "remove"; from: number; player: Player; key: number };
 
+const MOTION_MS: Record<BoardMotion["kind"], number> = {
+  place: 380,
+  move: 520,
+  remove: 420,
+};
+
 let motionSeq = 0;
 
 function boardsEqual(a: readonly Cell[], b: readonly Cell[]) {
@@ -22,6 +28,7 @@ function boardsEqual(a: readonly Cell[], b: readonly Cell[]) {
 export function useBoardMotion(board: readonly Cell[]): BoardMotion | null {
   const prevRef = useRef<readonly Cell[] | null>(null);
   const [motion, setMotion] = useState<BoardMotion | null>(null);
+  const clearTimer = useRef<number | null>(null);
 
   useEffect(() => {
     const prev = prevRef.current;
@@ -42,29 +49,39 @@ export function useBoardMotion(board: readonly Cell[]): BoardMotion | null {
     prevRef.current = board;
     const key = ++motionSeq;
 
+    let next: BoardMotion | null = null;
+
     if (vacated.length === 1 && occupied.length === 1) {
       const from = vacated[0];
       const to = occupied[0];
       const player = board[to] as Player;
       if (prev[from] === player) {
-        setMotion({ kind: "move", from, to, player, key });
-        return;
+        next = { kind: "move", from, to, player, key };
       }
-    }
-
-    if (vacated.length === 0 && occupied.length === 1) {
+    } else if (vacated.length === 0 && occupied.length === 1) {
       const to = occupied[0];
-      setMotion({ kind: "place", to, player: board[to] as Player, key });
-      return;
-    }
-
-    if (vacated.length === 1 && occupied.length === 0) {
+      next = { kind: "place", to, player: board[to] as Player, key };
+    } else if (vacated.length === 1 && occupied.length === 0) {
       const from = vacated[0];
-      setMotion({ kind: "remove", from, player: prev[from] as Player, key });
-      return;
+      next = { kind: "remove", from, player: prev[from] as Player, key };
     }
 
-    setMotion(null);
+    setMotion(next);
+
+    if (clearTimer.current !== null) window.clearTimeout(clearTimer.current);
+    if (next) {
+      clearTimer.current = window.setTimeout(() => {
+        setMotion((current) => (current?.key === next.key ? null : current));
+        clearTimer.current = null;
+      }, MOTION_MS[next.kind]);
+    }
+
+    return () => {
+      if (clearTimer.current !== null) {
+        window.clearTimeout(clearTimer.current);
+        clearTimer.current = null;
+      }
+    };
   }, [board]);
 
   return motion;

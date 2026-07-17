@@ -1,8 +1,14 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import styles from "./page.module.css";
 import { OnlinePanel } from "@/components/OnlinePanel";
+import { HowToPlay } from "@/components/HowToPlay";
 
 export default function HomePage() {
+  const [helpOpen, setHelpOpen] = useState(false);
+
   return (
     <main className={styles.hero}>
       <div className={styles.atmosphere} aria-hidden />
@@ -22,8 +28,16 @@ export default function HomePage() {
               vs AI
             </Link>
           </div>
+          <button
+            type="button"
+            className={styles.helpLink}
+            onClick={() => setHelpOpen(true)}
+          >
+            How to play
+          </button>
         </div>
       </div>
+      <HowToPlay open={helpOpen} onClose={() => setHelpOpen(false)} />
     </main>
   );
 }

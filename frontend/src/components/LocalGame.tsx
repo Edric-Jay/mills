@@ -8,29 +8,28 @@ export function LocalGame({ mode }: { mode: "hotseat" | "ai" }) {
   const game = useLocalGame(mode);
 
   return (
-    <>
-      <GameShell
-        title={mode === "ai" ? "vs AI" : "Local match"}
-        subtitle={
-          mode === "ai"
-            ? game.aiThinking
-              ? "AI is thinking…"
-              : "You play White"
-            : "Pass-and-play on one device"
-        }
-        state={game.state}
-        phase={game.phase}
-        selected={game.selected}
-        legalTargets={game.legalTargets}
-        onPointClick={game.onPointClick}
-        youAre={mode === "ai" ? game.humanColor : null}
-        shaking={game.shaking}
-      />
-      <div className={styles.actions}>
+    <GameShell
+      title={mode === "ai" ? "vs AI" : "Local match"}
+      subtitle={
+        mode === "ai"
+          ? game.aiThinking
+            ? "AI is thinking…"
+            : "You play White"
+          : "Pass-and-play on one device"
+      }
+      state={game.state}
+      phase={game.phase}
+      selected={game.selected}
+      legalTargets={game.legalTargets}
+      onPointClick={game.onPointClick}
+      youAre={mode === "ai" ? game.humanColor : null}
+      shaking={game.shaking}
+      onPlayAgain={game.reset}
+      footer={
         <button type="button" className={styles.btn} onClick={game.reset}>
-          New game
+          {game.state.winner ? "Play again" : "New game"}
         </button>
-      </div>
-    </>
+      }
+    />
   );
 }

@@ -15,11 +15,11 @@ const figtree = Figtree({
 });
 
 export const metadata: Metadata = {
-  title: "Mills — Nine Men's Morris",
-  description: "Play Nine Men's Morris online, locally, or against the AI.",
+  title: "Create Next App",
+  description: "Create Next App",
   appleWebApp: {
     capable: true,
-    title: "Mills",
+    title: "Create Next App",
     statusBarStyle: "default",
   },
 };

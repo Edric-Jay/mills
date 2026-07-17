@@ -91,6 +91,22 @@
   transform: translateY(-1px);
 }
 
+.helpLink {
+  border: none;
+  background: transparent;
+  color: var(--ink-soft);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  padding: 0.5rem;
+  min-height: 2.5rem;
+}
+
+.helpLink:hover {
+  color: var(--accent-deep);
+}
+
 @media (max-width: 480px) {
   .hero {
     place-items: start center;

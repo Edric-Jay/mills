@@ -1,8 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import type { GamePhase, GameState, Player } from "@mills/game";
 import { Board } from "./Board";
+import { HowToPlay } from "./HowToPlay";
+import { ResultModal } from "./ResultModal";
 import styles from "./GameShell.module.css";
 
 type Props = {
@@ -18,6 +22,8 @@ type Props = {
   shaking?: boolean;
   roomCode?: string;
   waiting?: boolean;
+  footer?: ReactNode;
+  onPlayAgain?: () => void;
 };
 
 function phaseLabel(phase: GamePhase, turn: Player, mustRemove: boolean): string {
@@ -44,9 +50,27 @@ export function GameShell({
   shaking,
   roomCode,
   waiting,
+  footer,
+  onPlayAgain,
 }: Props) {
+  const router = useRouter();
+  const [helpOpen, setHelpOpen] = useState(false);
+  const [resultDismissed, setResultDismissed] = useState(false);
+
   const millHighlight =
     state.mustRemove || phase === "removing" ? state.turn : null;
+
+  const winner = state.winner;
+  const showResult = !!winner && !resultDismissed;
+
+  const handlePlayAgain = useCallback(() => {
+    setResultDismissed(false);
+    onPlayAgain?.();
+  }, [onPlayAgain]);
+
+  useEffect(() => {
+    setResultDismissed(false);
+  }, [winner]);
 
   return (
     <div className={styles.page}>
@@ -63,6 +87,14 @@ export function GameShell({
             </p>
           )}
         </div>
+        <button
+          type="button"
+          className={styles.help}
+          aria-label="How to play"
+          onClick={() => setHelpOpen(true)}
+        >
+          ?
+        </button>
       </header>
 
       <div className={styles.status}>
@@ -117,6 +149,22 @@ export function GameShell({
           </span>
         </div>
       </div>
+
+      {footer ? <div className={styles.footer}>{footer}</div> : null}
+
+      <HowToPlay open={helpOpen} onClose={() => setHelpOpen(false)} />
+
+      {winner && (
+        <ResultModal
+          open={showResult}
+          winner={winner}
+          winReason={state.winReason}
+          youAre={youAre}
+          onPlayAgain={onPlayAgain ? handlePlayAgain : undefined}
+          onHome={() => router.push("/")}
+          onDismiss={() => setResultDismissed(true)}
+        />
+      )}
     </div>
   );
 }

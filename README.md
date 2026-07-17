@@ -54,6 +54,10 @@ npm test
 - **Local 2-player** — same device, engine in the browser
 - **vs AI** — browser-side minimax
 
+## How to play
+
+See [HOW_TO_PLAY.md](./HOW_TO_PLAY.md). In the app, use **How to play** on the home page or **?** during a match.
+
 ## Deploy
 
 See [DEPLOY.md](./DEPLOY.md) for Vercel (frontend) and Render (backend).

@@ -19,119 +19,62 @@
 .point {
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.point:focus-visible circle:last-child {
+  stroke: var(--accent);
+  stroke-width: 0.6;
+  fill: rgba(196, 92, 38, 0.12);
 }
 
 .flyLayer {
   pointer-events: none;
 }
 
-.flyTrail {
-  stroke-width: 1.4;
-  stroke-linecap: round;
-  stroke-dasharray: 2.5 2;
-  opacity: 0.85;
-  animation: trail-fade 0.52s ease-out forwards;
-}
-
-.originGhost {
-  stroke-width: 0.85;
-  stroke-dasharray: 2 1.5;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: ghost-fade 0.52s ease-out forwards;
-}
-
-.destRing {
-  stroke-width: 0.9;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: dest-pulse 0.52s ease-out forwards;
-}
-
+/* Opacity-only — CSS transform/scale on SVG circles collapses pieces toward the board center */
 .pieceLand {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: piece-land 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: piece-fade-in 0.38s ease-out both;
 }
 
-.pieceRemove {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: piece-remove 0.42s ease-in forwards;
+.millGlow {
+  animation: mill-pulse 1.2s ease-in-out infinite;
 }
 
-@keyframes trail-fade {
+@keyframes piece-fade-in {
   0% {
-    opacity: 0.9;
-  }
-  70% {
-    opacity: 0.55;
+    opacity: 0.2;
   }
   100% {
-    opacity: 0;
-  }
-}
-
-@keyframes ghost-fade {
-  0% {
-    opacity: 0.95;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.7);
-  }
-}
-
-@keyframes dest-pulse {
-  0% {
-    opacity: 0;
-    transform: scale(0.6);
-  }
-  35% {
-    opacity: 1;
-    transform: scale(1.05);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.35);
-  }
-}
-
-@keyframes piece-land {
-  0% {
-    transform: translateY(-8px) scale(0.55);
-    opacity: 0.35;
-  }
-  70% {
-    transform: translateY(0) scale(1.12);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(0) scale(1);
     opacity: 1;
   }
 }
 
-@keyframes piece-remove {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
+@keyframes mill-pulse {
+  0%,
   100% {
-    transform: translateY(-10px) scale(0.2);
-    opacity: 0;
+    filter: drop-shadow(0 0 0 transparent);
+  }
+  50% {
+    filter: drop-shadow(0 0 8px var(--glow));
   }
 }
 
 @media (max-width: 480px) {
   .wrap {
-    width: min(96vw, calc(100dvh - 11rem), calc(100svh - 11rem));
+    width: min(96vw, calc(100dvh - 11rem));
   }
 }
 
 @media (max-height: 700px) and (orientation: landscape) {
   .wrap {
     width: min(70vh, 52vw, 420px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pieceLand,
+  .millGlow {
+    animation: none;
   }
 }
