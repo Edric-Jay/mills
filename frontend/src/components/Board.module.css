@@ -30,6 +30,7 @@
 
 .flyLayer {
   pointer-events: none;
+  will-change: transform, opacity;
 }
 
 /* Opacity-only — CSS transform/scale on SVG circles collapses pieces toward the board center */

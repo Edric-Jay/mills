@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useRef } from "react";
 import {
   BOARD_LINES,
   POINT_COORDS,
@@ -20,8 +20,6 @@ type Props = {
   highlightMillsFor?: Player | null;
   shaking?: boolean;
 };
-
-type FlyPos = { x: number; y: number; lift: number };
 
 function easeOutCubic(t: number) {
   return 1 - Math.pow(1 - t, 3);
@@ -57,14 +55,16 @@ function PieceVisual({
   );
 }
 
-/** Move animation uses SVG attribute transforms only — CSS scale on SVG circles breaks layout. */
+/** Animate via DOM refs — avoids per-frame React re-renders that mobile Safari drops. */
 function FlyingPiece({ motion }: { motion: Extract<BoardMotion, { kind: "move" }> }) {
   const from = POINT_COORDS[motion.from];
   const to = POINT_COORDS[motion.to];
-  const [pos, setPos] = useState<FlyPos>({ x: from.x, y: from.y, lift: 0 });
-  const [pulse, setPulse] = useState(0);
+  const pieceRef = useRef<SVGGElement>(null);
+  const trailRef = useRef<SVGLineElement>(null);
+  const ghostRef = useRef<SVGCircleElement>(null);
+  const ringRef = useRef<SVGCircleElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     let frame = 0;
     const start = performance.now();
     const duration = 520;
@@ -74,28 +74,44 @@ function FlyingPiece({ motion }: { motion: Extract<BoardMotion, { kind: "move" }
       const t = Math.min(1, (now - start) / duration);
       const e = easeOutCubic(t);
       const lift = Math.sin(Math.PI * t) * peak;
-      setPos({
-        x: from.x + (to.x - from.x) * e,
-        y: from.y + (to.y - from.y) * e - lift,
-        lift,
-      });
-      setPulse(t);
+      const x = from.x + (to.x - from.x) * e;
+      const y = from.y + (to.y - from.y) * e - lift;
+      const scale = 1 + lift * 0.04;
+
+      pieceRef.current?.setAttribute(
+        "transform",
+        `translate(${x} ${y}) scale(${scale})`,
+      );
+
+      if (trailRef.current) {
+        trailRef.current.setAttribute("opacity", String(0.85 * (1 - t)));
+      }
+      if (ghostRef.current) {
+        ghostRef.current.setAttribute("r", String(3.2 + t * 2));
+        ghostRef.current.setAttribute("opacity", String(Math.max(0, 0.9 * (1 - t * 1.4))));
+      }
+      if (ringRef.current) {
+        const destOpacity =
+          t < 0.35 ? t / 0.35 : Math.max(0, 1 - (t - 0.35) / 0.65);
+        ringRef.current.setAttribute("r", String(3.2 + t * 2.8));
+        ringRef.current.setAttribute("opacity", String(destOpacity));
+      }
+
       if (t < 1) frame = requestAnimationFrame(tick);
     };
 
+    pieceRef.current?.setAttribute(
+      "transform",
+      `translate(${from.x} ${from.y}) scale(1)`,
+    );
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
   }, [motion.key, from.x, from.y, to.x, to.y]);
 
-  const scale = 1 + pos.lift * 0.04;
-  const trailOpacity = 0.85 * (1 - pulse);
-  const ghostOpacity = Math.max(0, 0.9 * (1 - pulse * 1.4));
-  const destOpacity = pulse < 0.35 ? pulse / 0.35 : Math.max(0, 1 - (pulse - 0.35) / 0.65);
-  const destR = 3.2 + pulse * 2.8;
-
   return (
     <g className={styles.flyLayer} pointerEvents="none">
       <line
+        ref={trailRef}
         x1={from.x}
         y1={from.y}
         x2={to.x}
@@ -104,28 +120,30 @@ function FlyingPiece({ motion }: { motion: Extract<BoardMotion, { kind: "move" }
         strokeWidth="1.4"
         strokeLinecap="round"
         strokeDasharray="2.5 2"
-        opacity={trailOpacity}
+        opacity={0.85}
       />
       <circle
+        ref={ghostRef}
         cx={from.x}
         cy={from.y}
-        r={3.2 + pulse * 2}
+        r={3.2}
         fill="none"
         stroke={motion.player === "white" ? "var(--white-edge)" : "var(--black-edge)"}
         strokeWidth="0.85"
         strokeDasharray="2 1.5"
-        opacity={ghostOpacity}
+        opacity={0.9}
       />
       <circle
+        ref={ringRef}
         cx={to.x}
         cy={to.y}
-        r={destR}
+        r={3.2}
         fill="none"
         stroke="var(--accent)"
         strokeWidth="0.9"
-        opacity={destOpacity}
+        opacity={0}
       />
-      <g transform={`translate(${pos.x} ${pos.y}) scale(${scale})`}>
+      <g ref={pieceRef}>
         <PieceVisual player={motion.player} />
       </g>
     </g>
@@ -134,32 +152,42 @@ function FlyingPiece({ motion }: { motion: Extract<BoardMotion, { kind: "move" }
 
 function RemovingPiece({ motion }: { motion: Extract<BoardMotion, { kind: "remove" }> }) {
   const c = POINT_COORDS[motion.from];
-  const [t, setT] = useState(0);
+  const groupRef = useRef<SVGGElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     let frame = 0;
     const start = performance.now();
     const duration = 420;
 
     const tick = (now: number) => {
       const progress = Math.min(1, (now - start) / duration);
-      setT(progress);
+      const e = easeOutCubic(progress);
+      const y = c.y - 10 * e;
+      const scale = 1 - 0.8 * e;
+
+      if (groupRef.current) {
+        groupRef.current.setAttribute(
+          "transform",
+          `translate(${c.x} ${y}) scale(${scale})`,
+        );
+        groupRef.current.setAttribute("opacity", String(1 - e));
+      }
+
       if (progress < 1) frame = requestAnimationFrame(tick);
     };
 
+    if (groupRef.current) {
+      groupRef.current.setAttribute("transform", `translate(${c.x} ${c.y}) scale(1)`);
+      groupRef.current.setAttribute("opacity", "1");
+    }
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [motion.key]);
-
-  const e = easeOutCubic(t);
-  const y = c.y - 10 * e;
-  const scale = 1 - 0.8 * e;
-  const opacity = 1 - e;
+  }, [motion.key, c.x, c.y]);
 
   return (
     <g className={styles.flyLayer} pointerEvents="none">
-      <g transform={`translate(${c.x} ${y}) scale(${scale})`}>
-        <PieceVisual player={motion.player} opacity={opacity} />
+      <g ref={groupRef}>
+        <PieceVisual player={motion.player} />
       </g>
     </g>
   );
